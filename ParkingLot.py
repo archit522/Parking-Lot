@@ -1,5 +1,7 @@
 from enum import Enum
 import Car
+import argparse
+import sys
 
 class StringCodes(Enum):
     OVERFLOW = -1
@@ -118,16 +120,26 @@ class ParkingLot:
                 print("Not found")
             else:
                 print(result)
-    
+
 def main():
     parkingLot = ParkingLot()
-    filename = "./test_lines.txt"
-    commands = []
-    with open(filename, 'r') as f:
-        commands = f.readlines()
-    
-    for command in commands:
-        parkingLot.processEachCommand(command)
+    parseObj = argparse.ArgumentParser(description="Parking Lot Application")
+    parseObj.add_argument("-f", dest = "fileName", action='store_const')
+    if parseObj.parse_args().fileName:
+        commands = []
+        with open(parseObj.parse_args().fileName, 'r') as f:
+            commands = f.readlines()
+        
+        for command in commands:
+            parkingLot.processEachCommand(command.rstrip())
+    else:
+        for command in sys.stdin:
+            if "exit" == command.rstrip():
+                break
+            parkingLot.processEachCommand(command.rstrip())
+
+if __init__ == "__main__":
+    main()
     
     
     
