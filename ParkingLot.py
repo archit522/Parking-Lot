@@ -43,6 +43,35 @@ class ParkingLot:
                 slots.append(i+1)
         return slots
     
+    def allCarsWithColor(self, color):
+        ids = []
+        for i in range(self.totalSlots):
+            if(self.eachSlotInfo[i] != 0 and self.eachSlotInfo[i].color == color):
+                ids.append(self.eachSlotInfo[i].uniqueId)
+        
+        return ids
+    
+    def printArrayByComma(self, arr):
+        n = len(arr)
+        for i in range(n):
+                print(arr[i])
+                if(i != n - 1):
+                    print(", ")
+        print("\n")
+    
+    def findSlotIdForUniqueId(self, uniqueId):
+        for i in range(self.totalSlots):
+            if(self.eachSlotInfo[i] != 0 and self.eachSlotInfo[i].uniqueId == uniqueId):
+                return i+1
+        
+        return StringCodes.NOT_PRESENT
+    
+    def parkingLotStatus(self):
+        print("Slot No.\tID\tColor")
+        for i in range(self.totalSlots):
+            if(self.eachSlotInfo[i] != 0):
+                print(i + "\t" + self.eachSlotInfo[i].uniqueId + "\t" + self.eachSlotInfo[i].color)
+    
     def processEachCommand(self, command):
         if(command.startswith("create_parking_lot")):
             temp = command.split(" ")
@@ -67,21 +96,28 @@ class ParkingLot:
                 print("Slot number %s is free" % temp[1])
         
         elif(command.startswith("status")):
-            #TO-DO
+            self.parkingLotStatus()
         
         elif(command.startswith("ids_for_cars_with_color")):
-            #TO-DO
+            temp = command.split(" ")
+            ids = self.allCarsWithColor(temp[1])
+            if(len(ids) == 0):
+                print("No car found with color: %s" % temp[1])
+            else:
+                self.printArrayByComma(ids)
             
         elif(command.startswith("slot_numbers_for_cars_with_color")):
             temp = command.split(" ")
             slots = self.allSlotsWithColor(temp[1])
-            for i in range(len(slots)):
-                print("%i" % slots[i])
-                if(i != len(slots) - 1):
-                    print(", ")
+            self.printArrayByComma(slots)
         
         elif(command.startswith("slot_number_for_id")):
-            #TO-DO
+            temp = command.split(" ")
+            result = self.findSlotIdForUniqueId(temp[i])
+            if(result == StringCodes.NOT_PRESENT):
+                print("Not found")
+            else:
+                print(result)
     
 def main():
     parkingLot = ParkingLot()
