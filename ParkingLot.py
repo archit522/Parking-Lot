@@ -9,11 +9,13 @@ class ParkingLot:
         self.totalSlots = 0
         self.occupied = 0
     
+    #Initiate Parking Lot with space = totalSlots
     def initiateLot(self, totalSlots):
         self.totalSlots = totalSlots
         self.eachSlotInfo = [0]*totalSlots
         return self.totalSlots
     
+    #Park New Car and return slot no.
     def parkNewCar(self, uniqueId, color):
         if self.occupied >= self.totalSlots:
             return StringCodes.OVERFLOW
@@ -24,6 +26,7 @@ class ParkingLot:
                 self.occupied += 1
                 return i+1
     
+    #Leave car from the slotId if found
     def removeCar(self, slotId):
         if slotId >= self.totalSlots:
             return StringCodes.INVALID_INPUT
@@ -35,6 +38,7 @@ class ParkingLot:
         self.occupied -= 1
         return StringCodes.SUCCESS
     
+    #Return list of all slots containing car with given color
     def allSlotsWithColor(self, color):
         slots = []
         for i in range(self.totalSlots):
@@ -42,6 +46,7 @@ class ParkingLot:
                 slots.append(i+1)
         return slots
     
+    #Return list of all cars parked in parking lot with given color
     def allCarsWithColor(self, color):
         ids = []
         for i in range(self.totalSlots):
@@ -50,6 +55,7 @@ class ParkingLot:
         
         return ids
     
+    #Print array seperated by comma
     def printArrayByComma(self, arr):
         n = len(arr)
         for i in range(n):
@@ -58,6 +64,7 @@ class ParkingLot:
                     print(", ", end='')
         print("\n", end='')
     
+    #Return slotId for car with given uniqueId
     def findSlotIdForUniqueId(self, uniqueId):
         for i in range(self.totalSlots):
             if self.eachSlotInfo[i] != 0 and self.eachSlotInfo[i].uniqueId == uniqueId:
@@ -65,12 +72,14 @@ class ParkingLot:
         
         return StringCodes.NOT_PRESENT
     
+    #Print status of parking lot
     def parkingLotStatus(self):
         print("Slot No.\tID\t\tColor")
         for i in range(self.totalSlots):
             if self.eachSlotInfo[i] != 0:
                 print(str(i+1) + "\t\t" + self.eachSlotInfo[i].uniqueId + "\t\t" + self.eachSlotInfo[i].color)
     
+    #Check input sanity (digit -> slotId, alphanumeric -> car uniqueId)
     def checkInput(self, inputString, whichType):
         if whichType == TypeChecker.DIGIT:
             return inputString.isdigit()
@@ -78,6 +87,7 @@ class ParkingLot:
         elif whichType == TypeChecker.ALPHANUMERIC:
             return inputString.isalnum()
     
+    #Process each line of command input through file or command line
     def processEachCommand(self, command):
         if command.startswith("create_parking_lot"):
             temp = command.split(" ")
@@ -151,9 +161,14 @@ class ParkingLot:
             print("Invalid Command")
 
 def main():
+    #create class obj
     parkingLot = ParkingLot()
+    
+    #Command line parser
     parseObj = argparse.ArgumentParser(description="Parking Lot Application")
     parseObj.add_argument("-f", dest = "fileName", required=False, action='store')
+    
+    #check if fileName is provided
     if parseObj.parse_args().fileName:
         commands = []
         with open(parseObj.parse_args().fileName, 'r') as f:

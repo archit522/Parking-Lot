@@ -3,6 +3,8 @@ import sys
 from ParkingLot import ParkingLot
 from StringCodes import StringCodes
 
+#Test class
+#Contains 6 tests for testing each and every query for correctness
 class ParkingLotTests(unittest.TestCase):
     
     def test_initiateLot(self):
