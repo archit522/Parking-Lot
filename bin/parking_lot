@@ -5,8 +5,14 @@
 # it.
 
 # This variable contains absolute path of this `parking_lot` script
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
-python3 ./ParkingLot.py
+DIR="$( cd "$( dirname "${BASH_SOURCE[1]}" )" >/dev/null && pwd )"
+
+if [ "$#" -eq  "0" ]
+   then
+     python3 $DIR/src/ParkingLot.py
+ else
+     python3 $DIR/src/ParkingLot.py -f $1
+ fi
 # Use DIR variable above to pinpoint your jar/executable/main class
 # e.g.
 # - if java
