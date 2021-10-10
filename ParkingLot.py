@@ -8,6 +8,10 @@ class StringCodes(Enum):
     SUCCESS = -3
     INVALID_INPUT = -4
 
+class TypeChecker(Enum):
+    DIGIT = 1
+    ALPHANUMERIC = 2
+
 class Car:
     def __init__(self, uniqueId, color):
         self.uniqueId = uniqueId
@@ -80,10 +84,17 @@ class ParkingLot:
             if self.eachSlotInfo[i] != 0:
                 print(str(i+1) + "\t\t" + self.eachSlotInfo[i].uniqueId + "\t\t" + self.eachSlotInfo[i].color)
     
+    def checkInput(self, inputString, whichType):
+        if whichType == TypeChecker.DIGIT:
+            return inputString.isdigit()
+        
+        elif whichType == TypeChecker.ALPHANUMERIC:
+            return inputString.isalnum()
+    
     def processEachCommand(self, command):
         if command.startswith("create_parking_lot"):
             temp = command.split(" ")
-            if(temp[1].isdigit() == False):
+            if(len(temp) != 2 or self.checkInput(temp[1], TypeChecker.DIGIT) == False):
                 print("Invalid Input")
                 return
             size = int(temp[1])
@@ -92,6 +103,9 @@ class ParkingLot:
 
         elif command.startswith("park"):
             temp = command.split(" ")
+            if(len(temp) != 3 or len(temp[1]) != 6 or self.checkInput(temp[1], TypeChecker.ALPHANUMERIC) == False):
+                print("Invalid Input")
+                return
             result = self.parkNewCar(temp[1], temp[2])
             if result == StringCodes.OVERFLOW:
                 print("Sorry, parking lot is full")
@@ -100,7 +114,7 @@ class ParkingLot:
         
         elif command.startswith("leave"):
             temp = command.split(" ")
-            if(temp[1].isdigit() == False):
+            if(len(temp) != 2 or self.checkInput(temp[1], TypeChecker.DIGIT) == False):
                 print("Invalid Input")
                 return
             result = self.removeCar(int(temp[1]) - 1)
@@ -116,6 +130,9 @@ class ParkingLot:
         
         elif command.startswith("ids_for_cars_with_color"):
             temp = command.split(" ")
+            if len(temp) != 2:
+                print("Invalid Input")
+                return
             ids = self.allCarsWithColor(temp[1])
             if len(ids) == 0:
                 print("No car found with color: %s" % temp[1])
@@ -124,11 +141,19 @@ class ParkingLot:
             
         elif command.startswith("slot_numbers_for_cars_with_color"):
             temp = command.split(" ")
+            if len(temp) != 2:
+                print("Invalid Input")
+                return
             slots = self.allSlotsWithColor(temp[1])
+            if len(slots) == 0:
+                print("No car found with color: %s" % temp[1])
             self.printArrayByComma(slots)
         
         elif command.startswith("slot_number_for_id"):
             temp = command.split(" ")
+            if(len(temp) != 2 or self.checkInput(temp[1], TypeChecker.ALPHANUMERIC) == False):
+                print("Invalid Input")
+                return
             result = self.findSlotIdForUniqueId(temp[1])
             if result == StringCodes.NOT_PRESENT:
                 print("Not found")
@@ -141,7 +166,7 @@ class ParkingLot:
 def main():
     parkingLot = ParkingLot()
     parseObj = argparse.ArgumentParser(description="Parking Lot Application")
-    parseObj.add_argument("-f", dest = "fileName", action='store', required=False)
+    parseObj.add_argument("-f", dest = "fileName", required=False, action='store')
     if parseObj.parse_args().fileName:
         commands = []
         with open(parseObj.parse_args().fileName, 'r') as f:
