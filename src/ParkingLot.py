@@ -8,11 +8,14 @@ class ParkingLot:
     def __init__(self):
         self.totalSlots = 0
         self.occupied = 0
+        self.isInitiated = False
     
     #Initiate Parking Lot with space = totalSlots
     def initiateLot(self, totalSlots):
         self.totalSlots = totalSlots
         self.eachSlotInfo = [0]*totalSlots
+        self.occupied = 0
+        self.isInitiated = True
         return self.totalSlots
     
     #Park New Car and return slot no.
@@ -91,7 +94,7 @@ class ParkingLot:
     def processEachCommand(self, command):
         if command.startswith("create_parking_lot"):
             temp = command.split(" ")
-            if(len(temp) != 2 or self.checkInput(temp[1], TypeChecker.DIGIT) == False):
+            if(len(temp) != 2 or self.checkInput(temp[1], TypeChecker.DIGIT) == False or int(temp[1]) < 0):
                 print("Invalid Input")
                 return
             size = int(temp[1])
@@ -100,7 +103,7 @@ class ParkingLot:
 
         elif command.startswith("park"):
             temp = command.split(" ")
-            if(len(temp) != 3 or len(temp[1]) != 6 or self.checkInput(temp[1], TypeChecker.ALPHANUMERIC) == False):
+            if(len(temp) != 3 or len(temp[1]) != 6 or self.checkInput(temp[1], TypeChecker.ALPHANUMERIC) == False or self.isInitiated == False):
                 print("Invalid Input")
                 return
             result = self.parkNewCar(temp[1], temp[2])
@@ -111,7 +114,7 @@ class ParkingLot:
         
         elif command.startswith("leave"):
             temp = command.split(" ")
-            if(len(temp) != 2 or self.checkInput(temp[1], TypeChecker.DIGIT) == False):
+            if(len(temp) != 2 or self.checkInput(temp[1], TypeChecker.DIGIT) == False or self.isInitiated == False):
                 print("Invalid Input")
                 return
             result = self.removeCar(int(temp[1]) - 1)
@@ -123,11 +126,14 @@ class ParkingLot:
                 print("Slot number %s is free" % temp[1])
         
         elif command.startswith("status"):
+            if (self.isInitiated == False):
+                print("Invalid Input")
+                return
             self.parkingLotStatus()
         
         elif command.startswith("ids_for_cars_with_color"):
             temp = command.split(" ")
-            if len(temp) != 2:
+            if (len(temp) != 2 or self.isInitiated == False):
                 print("Invalid Input")
                 return
             ids = self.allCarsWithColor(temp[1])
@@ -138,7 +144,7 @@ class ParkingLot:
             
         elif command.startswith("slot_numbers_for_cars_with_color"):
             temp = command.split(" ")
-            if len(temp) != 2:
+            if (len(temp) != 2 or self.isInitiated == False):
                 print("Invalid Input")
                 return
             slots = self.allSlotsWithColor(temp[1])
@@ -148,7 +154,7 @@ class ParkingLot:
         
         elif command.startswith("slot_number_for_id"):
             temp = command.split(" ")
-            if(len(temp) != 2 or self.checkInput(temp[1], TypeChecker.ALPHANUMERIC) == False):
+            if(len(temp) != 2 or self.checkInput(temp[1], TypeChecker.ALPHANUMERIC) == False or self.isInitiated == False):
                 print("Invalid Input")
                 return
             result = self.findSlotIdForUniqueId(temp[1])
