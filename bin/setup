@@ -5,3 +5,5 @@
 #
 # After this is run, bin/parking_lot
 # should Just Work.
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
+python3 ./ParkingLot.py -f sampleTestCases.txt
