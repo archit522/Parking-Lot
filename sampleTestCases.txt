@@ -9,6 +9,7 @@ leave 4
 status
 park AU7367 White
 park 999AAA White
-ids_for_cars_with_color White slot_numbers_for_cars_with_color White
+ids_for_cars_with_color White
+slot_numbers_for_cars_with_color White
 slot_number_for_id MNG728
 slot_number_for_id 045BKR

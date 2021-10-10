@@ -2,6 +2,9 @@ from enum import Enum
 import argparse
 import sys
 
+sys.path.append(".")
+from Car import Car
+
 class StringCodes(Enum):
     OVERFLOW = -1
     NOT_PRESENT = -2
@@ -11,11 +14,6 @@ class StringCodes(Enum):
 class TypeChecker(Enum):
     DIGIT = 1
     ALPHANUMERIC = 2
-
-class Car:
-    def __init__(self, uniqueId, color):
-        self.uniqueId = uniqueId
-        self.color = color
 
 class ParkingLot:
     def __init__(self):
